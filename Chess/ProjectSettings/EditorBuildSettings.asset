@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Ches_ against_the_bot.unity
+    guid: 6248065062c21954ea7799de987480e6
   m_configObjects: {}

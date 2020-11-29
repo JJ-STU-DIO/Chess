@@ -10,7 +10,7 @@ public class Board : MonoBehaviour
     Dictionary<string, GameObject> figures;
     Dictionary<string, GameObject> promots;
     DragAndDrop dad;
-    Chess chess;
+    public Chess chess;
     string onPromotionMove;
     public Board()
     {
@@ -98,6 +98,7 @@ public class Board : MonoBehaviour
     void DropObject(Vector2 from, Vector2 to)
     {
         Debug.Log(from + " " + to);
+        //Debug.Log(chess.fen);
         string e2 = VectorToSquare(from);
         string e4 = VectorToSquare(to);
         string figure = chess.GetFigureAt(e2).ToString();
