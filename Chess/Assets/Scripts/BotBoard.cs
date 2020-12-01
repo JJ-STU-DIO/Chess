@@ -1,14 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using ChessRules;
 
 public class BotBoard : MonoBehaviour
 {
+    [SerializeField] private string savePath;
+    [SerializeField] private string saveFileName = "data.json";
     Dictionary<string, GameObject> squares;
     Dictionary<string, GameObject> figures;
     Dictionary<string, GameObject> promots;
-   // string fen = "rnbqkbnr/qqqqpppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     DragAndDrop dad;
     public Chess chess;
     string onPromotionMove;
@@ -21,6 +23,17 @@ public class BotBoard : MonoBehaviour
         dad = new DragAndDrop(PickObject, DropObject);
         onPromotionMove = "";
     }
+
+    private void Awake()
+    {
+#if UNITY_ANDROID && UNITY_EDITOR
+     savePath = Path.Combine(Application.persistentDataPath, saveFileName);
+#else
+        savePath = Path.Combine(Application.dataPath, saveFileName);
+
+#endif
+    }
+
     void Start()
     {
         InitGameObjects();
@@ -219,4 +232,34 @@ public class BotBoard : MonoBehaviour
         return chess.IsCheckmate || chess.IsStalemate;
     }
 
+    public void SaveToFile()
+    {
+        BotBoardStruct boardStruct = new BotBoardStruct
+        {
+            Sfen = chess.fen,
+
+
+            Sfigures = this.figures
+        };
+
+        string json = JsonUtility.ToJson(boardStruct, true);
+
+        File.WriteAllText(savePath, json);
+    }
+
+    public void LoadFromFile()
+    {
+        if (!File.Exists(savePath))
+        {
+            Debug.Log("File.Exists(savePath)");
+            return;
+        }
+
+        string json = File.ReadAllText(savePath);
+
+        BotBoardStruct botBoardFromJson = JsonUtility.FromJson<BotBoardStruct>(json);
+
+        chess = new Chess(botBoardFromJson.Sfen);
+        ShowFigures();
+    }
 }
