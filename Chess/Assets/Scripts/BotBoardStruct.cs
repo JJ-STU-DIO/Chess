@@ -6,5 +6,4 @@ using UnityEngine;
 public struct BotBoardStruct
 {
     public string Sfen;
-    public Dictionary<string, GameObject> Sfigures;
 }

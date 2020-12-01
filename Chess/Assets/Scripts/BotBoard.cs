@@ -236,10 +236,7 @@ public class BotBoard : MonoBehaviour
     {
         BotBoardStruct boardStruct = new BotBoardStruct
         {
-            Sfen = chess.fen,
-
-
-            Sfigures = this.figures
+            Sfen = chess.fen
         };
 
         string json = JsonUtility.ToJson(boardStruct, true);
