@@ -173,6 +173,12 @@ public class Board : MonoBehaviour
         if (marked) square += "Marked";
         SetSprite(squares["" + x + y], square);
     }
+
+    public void RestartGame()
+    {
+        chess = new Chess();
+        ShowFigures();
+    }
 }
 class DragAndDrop
 {

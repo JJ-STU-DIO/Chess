@@ -232,31 +232,52 @@ public class BotBoard : MonoBehaviour
         return chess.IsCheckmate || chess.IsStalemate;
     }
 
+    public void RestartGame()
+    {
+        chess = new Chess();
+        ShowFigures();
+    }
+
     public void SaveToFile()
     {
         BotBoardStruct boardStruct = new BotBoardStruct
         {
-            Sfen = chess.fen
+            sFen = chess.fen
         };
 
         string json = JsonUtility.ToJson(boardStruct, true);
 
-        File.WriteAllText(savePath, json);
+        try
+        {
+            File.WriteAllText(savePath, json);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(message: "{GameLog} => [BotBoard] - (<color=red>Error: </color>) SaveToFile ->" + e.Message);
+        }
+
     }
 
     public void LoadFromFile()
     {
         if (!File.Exists(savePath))
         {
-            Debug.Log("File.Exists(savePath)");
+            Debug.Log(message: "{GameLog} => [BotBoard] - (<color=red>Error: </color>) LOadFromFile -> FILE NOT FOUND");
             return;
         }
 
-        string json = File.ReadAllText(savePath);
+        try
+        {
+            string json = File.ReadAllText(savePath);
 
-        BotBoardStruct botBoardFromJson = JsonUtility.FromJson<BotBoardStruct>(json);
+            BotBoardStruct botBoardFromJson = JsonUtility.FromJson<BotBoardStruct>(json);
 
-        chess = new Chess(botBoardFromJson.Sfen);
-        ShowFigures();
+            chess = new Chess(botBoardFromJson.sFen);
+            ShowFigures();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(message: "{GameLog} => [BotBoard] - (<color=red>Error: </color>) LoadFromFile Error" + e.Message);
+        }
     }
 }
